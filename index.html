@@ -367,6 +367,63 @@
                 generateLiveRow(); generateLiveRow(); generateLiveRow();
             </script>
         </section>
+                <!-- Droppo Live Interactive Developer API Sandbox -->
+        <section class="api-sandbox-widget" style="max-width: 1000px; margin: 60px auto; padding: 40px; font-family: sans-serif; background-color: #111827; border-radius: 12px; border: 1px solid #1F2937; text-align: left;">
+            <div style="border-bottom: 1px solid #1F2937; padding-bottom: 15px; margin-bottom: 25px;">
+                <h2 style="color: #10B981; font-size: 20px; margin: 0; letter-spacing: -0.5px;">Developer API Keys Sandbox Portal</h2>
+                <p style="color: #6B7280; font-size: 13px; margin: 4px 0 0 0;">Provision virtual testing credentials to evaluate integration environments instantly</p>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 20px; max-width: 500px; margin: 0 auto 30px auto; background-color: #030712; padding: 25px; border-radius: 8px; border: 1px solid #1F2937;">
+                <label style="color: #9CA3AF; font-size: 13px; font-weight: 600;">Corporate / Hospital Group Identifier</label>
+                <input type="text" id="sandbox-org-input" placeholder="e.g., Apollo Chennai Invoicing Wing" style="background-color: #111827; color: #F3F4F6; border: 1px solid #1F2937; padding: 12px; border-radius: 6px; font-size: 14px; outline: none; transition: border 0.2s;" onfocus="this.style.borderColor='#3B82F6'" onblur="this.style.borderColor='#1F2937'">
+                <button onclick="provisionSandboxKey()" style="background-color: #10B981; color: #0B0F19; font-weight: 700; border: none; padding: 12px; border-radius: 6px; font-size: 14px; cursor: pointer; transition: background 0.2s;" onmouseover="this.style.backgroundColor='#059669'" onmouseout="this.style.backgroundColor='#10B981'">Generate Mock Access Key</button>
+            </div>
+
+            <div id="sandbox-result-card" style="display: none; background-color: #030712; padding: 25px; border-radius: 8px; border: 1px solid #1F2937; animation: slideUpSandbox 0.4s ease-out;">
+                <h3 style="color: #3B82F6; font-size: 15px; margin-top: 0; margin-bottom: 15px;">🎉 Sandbox Token Provisioned Successfully</h3>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px;">
+                    <div>
+                        <span style="color: #6B7280; font-size: 11px; font-weight: 600; text-transform: uppercase; display: block; margin-bottom: 4px;">Assigned Target Node</span>
+                        <span id="sandbox-node-name" style="color: #E5E7EB; font-family: monospace; font-size: 14px;">-</span>
+                    </div>
+                    <div>
+                        <span style="color: #6B7280; font-size: 11px; font-weight: 600; text-transform: uppercase; display: block; margin-bottom: 4px;">Cryptographic Key Credentials</span>
+                        <span id="sandbox-key-string" style="color: #10B981; font-family: monospace; font-size: 14px; font-weight: 600;">-</span>
+                    </div>
+                </div>
+
+                <span style="color: #6B7280; font-size: 11px; font-weight: 600; text-transform: uppercase; display: block; margin-bottom: 6px;">Terminal Initialization Check Payload</span>
+                <pre style="background-color: #111827; padding: 15px; border-radius: 6px; border: 1px solid #1F2937; color: #E5E7EB; font-family: monospace; font-size: 12px; margin: 0; overflow-x: auto;"><code id="sandbox-terminal-snippet"></code></pre>
+            </div>
+
+            <style>
+                @keyframes slideUpSandbox { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+            </style>
+
+            <script>
+                function provisionSandboxKey() {
+                    const orgInput = document.getElementById('sandbox-org-input').value.trim();
+                    if (!orgInput) {
+                        alert("Please provide a valid Corporate or Hospital name parameter.");
+                        return;
+                    }
+
+                    const sanitized = orgInput.toLowerCase().replace(/[^a-z0-9]/g, '_').substring(0, 12);
+                    const randomSuffix = Math.floor(1000 + Math.random() * 9000);
+                    const generatedKey = `dp_sandbox_${sanitized}_${randomSuffix}`;
+
+                    document.getElementById('sandbox-node-name').innerText = orgInput;
+                    document.getElementById('sandbox-key-string').innerText = generatedKey;
+
+                    const codeString = `const { DroppoEngine } = require('@droppo/core');\n\nconst droppo = new DroppoEngine({\n  apiKey: "${generatedKey}",\n  endpoint: "https://droppo.info"\n});\n\n// Verified sandbox environment connection initialized successfully.`;
+                    document.getElementById('sandbox-terminal-snippet').innerText = codeString;
+                    document.getElementById('sandbox-result-card').style.display = 'block';
+                }
+            </script>
+        </section>
+
 
 
     </main>
