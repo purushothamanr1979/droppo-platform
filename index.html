@@ -282,6 +282,92 @@
                 </div>
             </div>
         </section>
+                <!-- Droppo Live Autonomous Network Analytics Widget -->
+        <section class="analytics-widget" style="max-width: 1000px; margin: 60px auto; padding: 30px; font-family: sans-serif; background-color: #111827; border-radius: 12px; border: 1px solid #1F2937;">
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1F2937; padding-bottom: 15px; margin-bottom: 25px;">
+                <div style="text-align: left;">
+                    <h2 style="color: #10B981; font-size: 20px; margin: 0; letter-spacing: -0.5px;">Live Network Transaction Stream</h2>
+                    <p style="color: #6B7280; font-size: 13px; margin: 4px 0 0 0;">Simulated autonomous e₹ split clearing ledger operations</p>
+                </div>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <span style="width: 8px; height: 8px; background-color: #10B981; border-radius: 50%; display: inline-block; animation: pulse 1.5s infinite;"></span>
+                    <span style="color: #10B981; font-size: 12px; font-weight: 600; font-family: monospace; letter-spacing: 1px;">CORE ENGINE ONLINE</span>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px;">
+                <div style="background-color: #030712; padding: 20px; border-radius: 8px; border: 1px solid #1F2937; text-align: left;">
+                    <span style="color: #9CA3AF; font-size: 12px; display: block; margin-bottom: 6px;">Total Volume Processed</span>
+                    <span id="total-volume" style="color: #F3F4F6; font-size: 24px; font-weight: 700; font-family: monospace;">₹4,12,85,900</span>
+                </div>
+                <div style="background-color: #030712; padding: 20px; border-radius: 8px; border: 1px solid #1F2937; text-align: left;">
+                    <span style="color: #9CA3AF; font-size: 12px; display: block; margin-bottom: 6px;">Autonomous Splits Cleared</span>
+                    <span id="total-splits" style="color: #3B82F6; font-size: 24px; font-weight: 700; font-family: monospace;">14,842</span>
+                </div>
+                <div style="background-color: #030712; padding: 20px; border-radius: 8px; border: 1px solid #1F2937; text-align: left;">
+                    <span style="color: #9CA3AF; font-size: 12px; display: block; margin-bottom: 6px;">Platform Licensing Cut (0.05%)</span>
+                    <span id="platform-fees" style="color: #10B981; font-size: 24px; font-weight: 700; font-family: monospace;">₹20,642.95</span>
+                </div>
+            </div>
+
+            <div style="background-color: #030712; padding: 20px; border-radius: 8px; border: 1px solid #1F2937;">
+                <div style="display: flex; justify-content: space-between; color: #6B7280; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; padding-bottom: 10px; border-bottom: 1px solid #1F2937; font-family: monospace;">
+                    <div style="width: 25%; text-align: left;">Origin Client</div>
+                    <div style="width: 30%; text-align: left;">Base Bill (e₹)</div>
+                    <div style="width: 30%; text-align: left;">Splits Map Structure</div>
+                    <div style="width: 15%; text-align: right;">Status</div>
+                </div>
+                <div id="live-ledger-rows" style="font-family: monospace; font-size: 13px; color: #E5E7EB; text-align: left;">
+                    <!-- Rows update live on the fly -->
+                </div>
+            </div>
+
+            <style>
+                @keyframes pulse { 0% { opacity: 0.4; } 50% { opacity: 1; } 100% { opacity: 0.4; } }
+                .ledger-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #111827; animation: fadeInRow 0.5s ease-out; }
+                @keyframes fadeInRow { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+            </style>
+
+            <script>
+                const hospitals = ['Apollo Chennai', 'Fortis Mumbai', 'Max Delhi', 'Manipal Bangalore', 'Medanta Gurgaon'];
+                let baseVolume = 41285900;
+                let baseSplits = 14842;
+                let baseFees = 20642.95;
+
+                function generateLiveRow() {
+                    const hospital = hospitals[Math.floor(Math.random() * hospitals.length)];
+                    const billAmount = Math.floor(Math.random() * 180000) + 12000;
+                    const infraCut = Math.round(billAmount * 0.0005 * 100) / 100;
+                    
+                    baseVolume += billAmount;
+                    baseSplits += 1;
+                    baseFees += infraCut;
+
+                    document.getElementById('total-volume').innerText = '₹' + baseVolume.toLocaleString('en-IN');
+                    document.getElementById('total-splits').innerText = baseSplits.toLocaleString();
+                    document.getElementById('platform-fees').innerText = '₹' + baseFees.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+                    const rowsContainer = document.getElementById('live-ledger-rows');
+                    const newRow = document.createElement('div');
+                    newRow.className = 'ledger-row';
+                    newRow.innerHTML = `
+                        <div style="width: 25%; color: #3B82F6; font-weight: 600; text-align: left;">${hospital}</div>
+                        <div style="width: 30%; text-align: left;">₹${billAmount.toLocaleString('en-IN')}.00</div>
+                        <div style="width: 30%; color: #9CA3AF; font-size: 12px; text-align: left;">H:50% | D:35% | P:15%</div>
+                        <div style="width: 15%; text-align: right; color: #10B981; font-weight: 600;">✓ CLEARED</div>
+                    `;
+
+                    rowsContainer.insertBefore(newRow, rowsContainer.firstChild);
+                    if (rowsContainer.children.length > 5) {
+                        rowsContainer.removeChild(rowsContainer.lastChild);
+                    }
+                }
+
+                setInterval(generateLiveRow, 4000);
+                generateLiveRow(); generateLiveRow(); generateLiveRow();
+            </script>
+        </section>
+
 
     </main>
 
