@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Droppo Protocol | Executive Whitepaper</title>
+    <style>
+        body { background-color: #0B0F19; color: #F9FAFB; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; padding: 40px; line-height: 1.8; }
+        .container { max-width: 800px; margin: 0 auto; background-color: #111827; padding: 40px; border-radius: 12px; border: 1px solid #1F2937; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.5); }
+        h1 { color: #10B981; border-bottom: 2px solid #1F2937; padding-bottom: 15px; font-size: 28px; margin-top: 0; }
+        h2 { color: #3B82F6; margin-top: 35px; font-size: 20px; border-bottom: 1px solid #1F2937; padding-bottom: 5px; }
+        p { color: #D1D5DB; font-size: 16px; }
+        .math-box { background-color: #030712; padding: 20px; border-radius: 8px; border-left: 4px solid #10B981; font-family: monospace; color: #E5E7EB; margin: 20px 0; }
+        .back-link { display: inline-block; margin-top: 30px; color: #10B981; text-decoration: none; font-weight: 600; }
+        .back-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Droppo Protocol: Eliminating B2B Healthcare Settlement Leaks via Digital Rupee (e₹) Split Ledgers</h1>
+        <p><strong>Document Code:</strong> DP-WP-2026-V1 &bull; <strong>Classification:</strong> Public Board Review</p>
+        
+        <h2>1. The Multi-Billion Rupee Problem in Healthcare Settlements</h2>
+        <p>Corporate healthcare networks in India face a significant, continuous operational leak. Private hospital groups routinely lose between 1.2% to 2.0% of total inbound credit/debit card revenue directly to third-party commercial merchant gateways and aggregators. Furthermore, manual payouts across hospital infrastructure pools, individual consulting surgeons, and third-party pharmacy chains lead to immense administrative delays and reconciliation friction at the end of every month.</p>
+
+        <h2>2. System Architecture: The Sovereign Split Ledger Alternative</h2>
+        <p>The Droppo Protocol completely bypasses commercial billing intermediaries. By utilizing the Reserve Bank of India’s sovereign Digital Rupee (e₹) framework, transaction clearing runs on a direct ledger at zero merchant discount cost. Our core SDK architecture automates precision routing at the exact millisecond of patient payment clearance, splitting a single invoice into independent entity vaults mid-transit.</p>
+
+        <h2>3. Mathematical Integrity & Reconciliation Speed</h2>
+        <p>The software architecture features a deterministic reconciliation module. The platform infrastructure license fee is processed immediately, and the remaining settlement pool is accurately split based on custom group rules:</p>
+        
+        <div class="math-box">
+            Platform Fee = Round(Total Bill * 0.0005)<br>
+            Net Pool = Total Bill - Platform Fee<br>
+            Reconciliation Check: Sum(Entity Share Allocations) === Net Pool
+        </div>
+        
+        <p>Outbound network validations execute a secure SHA-256 HMAC handshake with localized Mumbai cloud servers in under 15 seconds, providing real-time compliance reporting and making human auditing efforts entirely obsolete.</p>
+
+        <h2>4. Commercial Viability and Enterprise Advantage</h2>
+        <p>Operating completely under free open-source MIT guidelines, Droppo has zero upfront deployment costs and zero capital retention periods. The technology integrates cleanly into existing Hospital Management Systems (HMS) via standard package managers, providing immediate bottom-line expansion for forward-thinking healthcare financial leaders.</p>
+
+        <a href="https://droppo.info" class="back-link">&larr; Return to Developer Storefront</a>
+    </div>
+</body>
+</html>
