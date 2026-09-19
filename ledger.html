@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Droppo Protocol | Active Revenue Ledger Monitor</title>
+    <style>
+        body {
+            background-color: #0d1117;
+            color: #c9d1d9;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .monitor-box {
+            background-color: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 40px;
+            width: 450px;
+            text-align: center;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+        }
+        h2 { color: #58a6ff; margin-bottom: 5px; font-weight: 600; }
+        .subtitle { color: #8b949e; font-size: 14px; margin-bottom: 30px; }
+        .metric-card {
+            background-color: #0d1117;
+            border: 1px solid #21262d;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+        .label { font-size: 12px; color: #8b949e; text-transform: uppercase; letter-spacing: 1px; }
+        .value { font-size: 32px; font-weight: bold; color: #2ea44f; margin-top: 5px; }
+        .value.blue { color: #58a6ff; }
+        .value.white { color: #ffffff; }
+        .status { font-size: 12px; color: #8b949e; margin-top: 25px; display: flex; justify-content: center; align-items: center; gap: 8px; }
+        .dot { width: 8px; height: 8px; background-color: #2ea44f; border-radius: 50%; display: inline-block; }
+    </style>
+</head>
+<body>
+
+<div class="monitor-box">
+    <h2>Droppo Network Core</h2>
+    <div class="subtitle">Live Database Ledger Metrics (Mumbai Node)</div>
+
+    <div class="metric-card">
+        <div class="label">Total Volume Processed</div>
+        <div id="live-volume" class="value white">Fetching...</div>
+    </div>
+
+    <div class="metric-card">
+        <div class="label">Autonomous Splits Cleared</div>
+        <div id="live-splits" class="value blue">...</div>
+    </div>
+
+    <div class="metric-card">
+        <div class="label">Platform Revenue Tally (0.05%)</div>
+        <div id="live-fees" class="value">Fetching...</div>
+    </div>
+
+    <div class="status">
+        <span class="dot"></span> Secure Cloud Database Feed Online
+    </div>
+</div>
+
+<script src="https://jsdelivr.net"></script>
+<script>
+    const supabaseUrl = 'https://mpfmbstldgoiummhdbhn.supabase.co';
+    const supabaseKey = 'sb_publishable_2uofoS3UDxGGlk82VKPqeA_LGsuvO5b77OqC92';
+    const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+    async function syncLedgerData() {
+        try {
+            const { data, error } = await supabaseClient
+                .from('transaction_ledger')
+                .select('total_invoice_value, platform_toll_fee');
+
+            if (!error && data) {
+                let volumeSum = 0;
+                let feeSum = 0;
+                let splitsCount = data.length;
+
+                data.forEach(row => {
+                    volumeSum += Number(row.total_invoice_value || 0);
+                    feeSum += Number(row.platform_toll_fee || 0);
+                });
+
+                document.getElementById('live-volume').innerText = '₹' + volumeSum.toLocaleString('en-IN') + '.00';
+                document.getElementById('live-splits').innerText = splitsCount.toLocaleString();
+                document.getElementById('live-fees').innerText = '₹' + feeSum.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            } else if (error) {
+                console.error("Supabase Read Error:", error.message);
+                document.getElementById('live-fees').innerText = "Access Blocked";
+            }
+        } catch (err) {
+            console.error("Connection Error:", err.message);
+        }
+    }
+
+    // Refresh every 5 seconds for absolute real-time auditing
+    setInterval(syncLedgerData, 5000);
+    syncLedgerData();
+</script>
+
+</body>
+</html>
