@@ -329,13 +329,12 @@
             </style>
 
             <script src="https://jsdelivr.net"></script>
-
-
 <script>
     // Initialize your direct cloud server database gateway connection
-    const supabaseUrl = 'https://supabase.co'; // Your active project URL string
-    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVqd3doYm9mYXNmb2ZiZGZiZGZiIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTUxMzg4MDAsImV4cCI6MjAwNjc0ODgwMH0.0bF_xY_zX_X_X_X_X_X_X_X_X_X_X_X_X_X_X_X_X_X_X'; // Your public anon API key string
+    const supabaseUrl = 'https://supabase.co'; 
+    const supabaseKey = 'sb_publishable_2uofoS3UDxGGlk82VKPqeA_LGsuvO5b77OqC92'; 
     const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
 
     async function pullTrueLiveBalances() {
         try {
