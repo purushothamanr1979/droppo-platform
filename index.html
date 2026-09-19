@@ -330,10 +330,11 @@
 
             <script src="https://jsdelivr.net"></script>
 <script>
-    // Initialize your direct cloud server database gateway connection
-    const supabaseUrl = 'https://supabase.co'; 
+    // This points your website directly to your personal AGNI database
+    const supabaseUrl = 'https://mpfmbstldgoiummhdbhn.supabase.co'; 
     const supabaseKey = 'sb_publishable_2uofoS3UDxGGlk82VKPqeA_LGsuvO5b77OqC92'; 
     const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
 
 
     async function pullTrueLiveBalances() {
