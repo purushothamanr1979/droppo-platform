@@ -330,17 +330,13 @@
 
             <script src="https://jsdelivr.net"></script>
 <script>
-    // This points your website directly to your personal AGNI database
-    const supabaseUrl = 'https://supabase.co';
-    const supabaseKey = 'sb_publishable_2uofoS3UDxGGlk82VKPqeA_LGsuvO5b77OqC92'; 
-    const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
-
-
+    const urlNode = "https://supabase.co";
+    const keyNode = "sb_publishable_2uofoS3UDxGGlk82VKPqeA_LGsuvO5b77OqC92";
+    const clientNode = window.supabase.createClient(urlNode, keyNode);
 
     async function pullTrueLiveBalances() {
         try {
-            // 1. Query your active permanent ledger table row blocks
-            const { data, error } = await _supabase
+            const { data, error } = await clientNode
                 .from('transaction_ledger')
                 .select('total_invoice_value, platform_toll_fee');
 
@@ -349,26 +345,26 @@
                 let cumulativeFees = 0;
                 let cumulativeSplits = data.length;
 
-                // 2. Mathematically calculate your true totals straight from Mumbai servers
                 data.forEach(row => {
                     cumulativeVolume += Number(row.total_invoice_value);
                     cumulativeFees += Number(row.platform_toll_fee);
                 });
 
-                // 3. Update your front-end screen dashboard display tags permanently
                 document.getElementById('total-volume').innerText = '₹' + cumulativeVolume.toLocaleString('en-IN') + '.00';
                 document.getElementById('total-splits').innerText = cumulativeSplits.toLocaleString();
                 document.getElementById('platform-fees').innerText = '₹' + cumulativeFees.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            } else if (error) {
+                console.error("Ledger target read boundary failure:", error.message);
             }
         } catch (err) {
             console.error("Ledger communication synchronization barrier:", err.message);
         }
     }
 
-    // Refresh metrics automatically from your database rows every 12 seconds
-    setInterval(pullTrueLiveBalances, 12000);
+    setInterval(pullTrueLiveBalances, 10000);
     pullTrueLiveBalances();
 </script>
+
 
         </section>
                 <!-- Droppo Live Interactive Developer API Sandbox -->
