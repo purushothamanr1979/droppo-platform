@@ -328,44 +328,46 @@
                 @keyframes fadeInRow { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
             </style>
 
-            <script>
-                const hospitals = ['Apollo Chennai', 'Fortis Mumbai', 'Max Delhi', 'Manipal Bangalore', 'Medanta Gurgaon'];
-                let baseVolume = 41285900;
-                let baseSplits = 14842;
-                let baseFees = 20642.95;
+            <script src="https://jsdelivr.net"></script>
+<script>
+    // Initialize your direct cloud server database gateway connection
+    const supabaseUrl = 'https://supabase.co'; // Your active project URL string
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVqd3doYm9mYXNmb2ZiZGZiZGZiIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTUxMzg4MDAsImV4cCI6MjAwNjc0ODgwMH0.0bF_xY_zX_X_X_X_X_X_X_X_X_X_X_X_X_X_X_X_X_X_X'; // Your public anon API key string
+    const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
-                function generateLiveRow() {
-                    const hospital = hospitals[Math.floor(Math.random() * hospitals.length)];
-                    const billAmount = Math.floor(Math.random() * 180000) + 12000;
-                    const infraCut = Math.round(billAmount * 0.0005 * 100) / 100;
-                    
-                    baseVolume += billAmount;
-                    baseSplits += 1;
-                    baseFees += infraCut;
+    async function pullTrueLiveBalances() {
+        try {
+            // 1. Query your active permanent ledger table row blocks
+            const { data, error } = await _supabase
+                .from('transaction_ledger')
+                .select('total_invoice_value, platform_toll_fee');
 
-                    document.getElementById('total-volume').innerText = '₹' + baseVolume.toLocaleString('en-IN');
-                    document.getElementById('total-splits').innerText = baseSplits.toLocaleString();
-                    document.getElementById('platform-fees').innerText = '₹' + baseFees.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            if (!error && data) {
+                let cumulativeVolume = 0;
+                let cumulativeFees = 0;
+                let cumulativeSplits = data.length;
 
-                    const rowsContainer = document.getElementById('live-ledger-rows');
-                    const newRow = document.createElement('div');
-                    newRow.className = 'ledger-row';
-                    newRow.innerHTML = `
-                        <div style="width: 25%; color: #3B82F6; font-weight: 600; text-align: left;">${hospital}</div>
-                        <div style="width: 30%; text-align: left;">₹${billAmount.toLocaleString('en-IN')}.00</div>
-                        <div style="width: 30%; color: #9CA3AF; font-size: 12px; text-align: left;">H:50% | D:35% | P:15%</div>
-                        <div style="width: 15%; text-align: right; color: #10B981; font-weight: 600;">✓ CLEARED</div>
-                    `;
+                // 2. Mathematically calculate your true totals straight from Mumbai servers
+                data.forEach(row => {
+                    cumulativeVolume += Number(row.total_invoice_value);
+                    cumulativeFees += Number(row.platform_toll_fee);
+                });
 
-                    rowsContainer.insertBefore(newRow, rowsContainer.firstChild);
-                    if (rowsContainer.children.length > 5) {
-                        rowsContainer.removeChild(rowsContainer.lastChild);
-                    }
-                }
+                // 3. Update your front-end screen dashboard display tags permanently
+                document.getElementById('total-volume').innerText = '₹' + cumulativeVolume.toLocaleString('en-IN') + '.00';
+                document.getElementById('total-splits').innerText = cumulativeSplits.toLocaleString();
+                document.getElementById('platform-fees').innerText = '₹' + cumulativeFees.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            }
+        } catch (err) {
+            console.error("Ledger communication synchronization barrier:", err.message);
+        }
+    }
 
-                setInterval(generateLiveRow, 4000);
-                generateLiveRow(); generateLiveRow(); generateLiveRow();
-            </script>
+    // Refresh metrics automatically from your database rows every 12 seconds
+    setInterval(pullTrueLiveBalances, 12000);
+    pullTrueLiveBalances();
+</script>
+
         </section>
                 <!-- Droppo Live Interactive Developer API Sandbox -->
         <section class="api-sandbox-widget" style="max-width: 1000px; margin: 60px auto; padding: 40px; font-family: sans-serif; background-color: #111827; border-radius: 12px; border: 1px solid #1F2937; text-align: left;">
