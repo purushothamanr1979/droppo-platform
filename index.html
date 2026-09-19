@@ -330,13 +330,15 @@
 
             <script src="https://jsdelivr.net"></script>
 <script>
-    const urlNode = "https://supabase.co";
-    const keyNode = "sb_publishable_2uofoS3UDxGGlk82VKPqeA_LGsuvO5b77OqC92";
-    const clientNode = window.supabase.createClient(urlNode, keyNode);
+    // Pointing your website storefront directly to your personal AGNI cloud ledger data streams
+    const supabaseUrl = 'https://supabase.co'; 
+    const supabaseKey = 'sb_publishable_2uofoS3UDxGGlk82VKPqeA_LGsuvO5b77OqC92'; 
+    const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
 
     async function pullTrueLiveBalances() {
         try {
-            const { data, error } = await clientNode
+            // 1. Fetching your permanent ledger entries using the unified client name mapping
+            const { data, error } = await supabaseClient
                 .from('transaction_ledger')
                 .select('total_invoice_value, platform_toll_fee');
 
@@ -345,22 +347,25 @@
                 let cumulativeFees = 0;
                 let cumulativeSplits = data.length;
 
+                // 2. Reconcile matrix volumes straight from your secure cloud rows
                 data.forEach(row => {
                     cumulativeVolume += Number(row.total_invoice_value);
                     cumulativeFees += Number(row.platform_toll_fee);
                 });
 
+                // 3. Update frontend visualization parameters dynamically on your screen display text elements
                 document.getElementById('total-volume').innerText = '₹' + cumulativeVolume.toLocaleString('en-IN') + '.00';
                 document.getElementById('total-splits').innerText = cumulativeSplits.toLocaleString();
                 document.getElementById('platform-fees').innerText = '₹' + cumulativeFees.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
             } else if (error) {
-                console.error("Ledger target read boundary failure:", error.message);
+                console.error("Database connection access barrier:", error.message);
             }
         } catch (err) {
-            console.error("Ledger communication synchronization barrier:", err.message);
+            console.error("Synchronization loop interruption:", err.message);
         }
     }
 
+    // Continuously monitor and sync numbers cleanly from your databases every 10 seconds
     setInterval(pullTrueLiveBalances, 10000);
     pullTrueLiveBalances();
 </script>
